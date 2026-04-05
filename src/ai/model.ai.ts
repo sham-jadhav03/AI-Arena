@@ -1,10 +1,10 @@
-import { ChatGoogle } from "@langchain/google";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatMistralAI } from "@langchain/mistralai";
 import { ChatGroq } from "@langchain/groq";
 import config from "../config/config.js";
 
-export const geminiModel = new ChatGoogle({
-  model: "gemini-flash-latest",
+export const geminiModel = new ChatGoogleGenerativeAI({
+  model: "gemini-2.5-flash-lite",
   apiKey: config.GOOGLE_API_KEY,
 });
 
