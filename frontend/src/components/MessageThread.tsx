@@ -25,23 +25,23 @@ export default function MessageThread({ data, index }: MessageThreadProps) {
         <SolutionCard
           label="Solution A"
           content={data.solution_1}
-          score={data.judge.solution_1_score}
+          score={data.judge?.solution_1_score ?? 0}
           index={1}
         />
         <SolutionCard
           label="Solution B"
           content={data.solution_2}
-          score={data.judge.solution_2_score}
+          score={data.judge?.solution_2_score ?? 0}
           index={2}
         />
       </div>
 
       {/* Judge Verdict */}
       <JudgeVerdict
-        score1={data.judge.solution_1_score}
-        score2={data.judge.solution_2_score}
-        reasoning1={data.judge.solution_1_reasoning}
-        reasoning2={data.judge.solution_2_reasoning}
+        score1={data.judge?.solution_1_score ?? 0}
+        score2={data.judge?.solution_2_score ?? 0}
+        reasoning1={data.judge?.solution_1_reasoning ?? ""}
+        reasoning2={data.judge?.solution_2_reasoning ?? ""}
       />
     </div>
   )

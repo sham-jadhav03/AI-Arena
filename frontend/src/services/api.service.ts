@@ -19,6 +19,8 @@ export interface ArenaResponse {
 }
 
 export async function invokeArena(problem: string): Promise<ArenaResponse> {
-  const response = await api.post<ArenaResponse>('/invoke', { problem })
+  const response = await api.post<ArenaResponse>('/invoke', { input: problem })
+  console.log(response);
+  
   return response.data
 }

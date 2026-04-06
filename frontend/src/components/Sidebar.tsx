@@ -4,11 +4,11 @@ export default function Sidebar() {
   const { history, activeIndex, setActiveIndex, handleNewChat } = useChat()
 
   return (
-    <aside className="w-[268px] min-w-[268px] h-full bg-[#f3f4f5] flex flex-col">
+    <aside className="w-67 min-w-67 h-full bg-[#f3f4f5] flex flex-col">
       {/* Logo */}
       <div className="px-6 py-6 border-b border-[#edeeef]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-400 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-linear-to-br from-indigo-600 to-indigo-400 flex items-center justify-center">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M8 2L14 5.5V10.5L8 14L2 10.5V5.5L8 2Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round" />
               <circle cx="8" cy="8" r="2" fill="white" />
@@ -38,11 +38,11 @@ export default function Sidebar() {
             <p className="text-xs font-medium leading-snug line-clamp-2">{item.problem}</p>
             <div className="mt-1 flex gap-2">
               <span className="text-[10px] text-[#777587]">
-                S1: {item.judge.solution_1_score}/10
+                S1: {item.judge?.solution_1_score ?? "-"}/10
               </span>
               <span className="text-[10px] text-[#777587]">·</span>
               <span className="text-[10px] text-[#777587]">
-                S2: {item.judge.solution_2_score}/10
+                S2: {item.judge?.solution_2_score ?? "-"}/10
               </span>
             </div>
           </button>
@@ -54,7 +54,7 @@ export default function Sidebar() {
         <button
           onClick={handleNewChat}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
-            bg-gradient-to-r from-[#3525cd] to-indigo-500 text-white text-xs font-semibold
+            bg-linear-to-r from-[#3525cd] to-indigo-500 text-white text-xs font-semibold
             tracking-wide hover:opacity-90 active:scale-[0.98] transition-all duration-150
             shadow-[0_4px_16px_rgba(53,37,205,0.22)]"
         >

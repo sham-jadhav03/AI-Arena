@@ -76,7 +76,7 @@ export default function ChatInterface() {
             {/* Empty state */}
             {history.length === 0 && !loading && (
               <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-400 flex items-center justify-center shadow-[0_8px_24px_rgba(53,37,205,0.2)]">
+                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-indigo-600 to-indigo-400 flex items-center justify-center shadow-[0_8px_24px_rgba(53,37,205,0.2)]">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M12 3L21 8.5V15.5L12 21L3 15.5V8.5L12 3Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round" />
                     <circle cx="12" cy="12" r="3" fill="white" />
@@ -148,13 +148,13 @@ export default function ChatInterface() {
                 placeholder="Describe your problem… (Enter to send, Shift+Enter for newline)"
                 rows={1}
                 disabled={loading}
-                className="flex-1 resize-none bg-transparent text-sm text-[#191c1d] placeholder:text-[#777587] outline-none leading-relaxed min-h-[24px] max-h-[160px] disabled:opacity-50"
+                className="flex-1 resize-none bg-transparent text-sm text-[#191c1d] placeholder:text-[#777587] outline-none leading-relaxed min-h-6 max-h-40 disabled:opacity-50"
               />
               <button
                 onClick={onSend}
                 disabled={loading || !input.trim()}
                 id="send-btn"
-                className="shrink-0 w-9 h-9 rounded-xl bg-gradient-to-br from-[#3525cd] to-indigo-500
+                className="shrink-0 w-9 h-9 rounded-xl bg-linear-to-br from-[#3525cd] to-indigo-500
                   flex items-center justify-center text-white
                   hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed
                   transition-all duration-150 shadow-[0_4px_12px_rgba(53,37,205,0.25)]"

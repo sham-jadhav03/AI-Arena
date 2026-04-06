@@ -1,8 +1,8 @@
-import { createContext, useState, type ReactNode, type ChangeEvent, type KeyboardEvent } from "react";
+import { createContext, type ReactNode, type ChangeEvent, type KeyboardEvent } from "react";
 import type { ArenaResponse } from '../services/api.service';
-import { invokeArena } from '../services/api.service';
+import { useChatLogic } from "../hooks/useChat";
 
-interface ChatContextType {
+export interface ChatContextType {
     history: ArenaResponse[];
     setHistory: React.Dispatch<React.SetStateAction<ArenaResponse[]>>;
     input: string;
@@ -22,66 +22,8 @@ interface ChatContextType {
 export const ChatContext = createContext<ChatContextType | null>(null);
 
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
-    const [history, setHistory] = useState<ArenaResponse[]>([]);
-    const [input, setInput] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-    const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        setInput(e.target.value);
-        e.target.style.height = 'auto';
-        e.target.style.height = `${Math.min(e.target.scrollHeight, 160)}px`;
-    };
-
-    const handleSend = async () => {
-        const trimmed = input.trim();
-        if (!trimmed || loading) return;
-
-        setLoading(true);
-        setError(null);
-        setActiveIndex(null);
-        setInput('');
-
-        try {
-            const result = await invokeArena(trimmed);
-            setHistory((prev) => [...prev, result]);
-        } catch (err: unknown) {
-            const msg = err instanceof Error ? err.message : 'Something went wrong';
-            setError(msg);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-        }
-    };
-
-    const handleNewChat = () => {
-        setActiveIndex(null);
-        setError(null);
-    };
-
-    const value: ChatContextType = {
-        history,
-        setHistory,
-        input,
-        setInput,
-        loading,
-        setLoading,
-        error,
-        setError,
-        activeIndex,
-        setActiveIndex,
-        handleSend,
-        handleInput,
-        handleKeyDown,
-        handleNewChat,
-    };
+    // The logic is now housed in the useChatLogic hook in useChat.ts
+    const value = useChatLogic();
 
     return (
         <ChatContext.Provider value={value}>
