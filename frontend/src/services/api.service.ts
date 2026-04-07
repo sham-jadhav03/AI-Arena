@@ -18,9 +18,19 @@ export interface ArenaResponse {
   judge: JudgeResult
 }
 
+export interface ApiResponse<T> {
+  success: boolean
+  message: string
+  result: T
+}
+
 export async function invokeArena(problem: string): Promise<ArenaResponse> {
-  const response = await api.post<ArenaResponse>('/invoke', { input: problem })
-  console.log(response);
+  const response = await api.post<ApiResponse<ArenaResponse>>('/invoke', { input: problem })
+  console.log('API Response:', response.data)
   
-  return response.data
+  if (!response.data.success) {
+    throw new Error(response.data.message || 'Failed to execute arena')
+  }
+
+  return response.data.result
 }

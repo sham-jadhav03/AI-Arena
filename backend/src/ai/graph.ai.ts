@@ -7,7 +7,7 @@ import {
 } from "@langchain/langgraph";
 import z from "zod";
 import { geminiModel, mistralAIModel, openAIModel } from "./model.ai.js";
-import { createAgent, HumanMessage, providerStrategy } from "langchain";
+import { createAgent, HumanMessage, toolStrategy } from "langchain";
 
 const state = new StateSchema({
   problem: z.string().default(""),
@@ -28,8 +28,8 @@ const solutionNode: GraphNode<typeof state> = async (state) => {
   ]);
 
   return {
-    solution_1: mistralResponse.text,
-    solution_2: geminiResponse.text,
+    solution_1: String(mistralResponse.content || ""),
+    solution_2: String(geminiResponse.content || ""),
   };
 };
 
@@ -38,7 +38,7 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
 
   const judge = createAgent({
     model: openAIModel,
-    responseFormat: providerStrategy(
+    responseFormat: toolStrategy(
       z.object({
         solution_1_score: z.number().min(0).max(10),
         solution_2_score: z.number().min(0).max(10),
@@ -61,12 +61,13 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
     ],
   });
 
+  const data = judgeResponse.structuredResponse || judgeResponse;
   const {
     solution_1_score,
     solution_2_score,
     solution_1_reasoning,
     solution_2_reasoning,
-  } = judgeResponse.structuredResponse;
+  } = data;
 
   return {
     judge: {

@@ -17,19 +17,30 @@ export default function ChatInterface() {
 
   const bottomRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const lastPromptRef = useRef('')
 
-  // Auto-scroll to bottom on new messages
+  // Auto-scroll to bottom on new messages or loading state
   useEffect(() => {
     if (activeIndex === null) {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+      // Small timeout ensures the DOM has updated with new elements (like the loader skeleton)
+      const timer = setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+      }, 50);
+      return () => clearTimeout(timer);
     }
-  }, [history, activeIndex])
+  }, [history, activeIndex, loading]) // Include loading to scroll when the skeleton appears
 
   // Wrap handleSend to add UI specific logic (resetting textarea height)
   const onSend = async () => {
-    if (!input.trim() || loading) return
-    await handleSend()
+    const trimmed = input.trim()
+    if (!trimmed || loading) return
+    
+    // Store the prompt so the skeleton can show it
+    lastPromptRef.current = trimmed
+    
+    // Reset height immediately for snappy UI response
     if (textareaRef.current) textareaRef.current.style.height = 'auto'
+    await handleSend()
   }
 
   // Wrap handleNewChat to add UI specific logic (scrolling)
@@ -106,7 +117,11 @@ export default function ChatInterface() {
             {loading && (
               <div className="space-y-5 animate-pulse">
                 <div className="flex justify-end">
-                  <div className="h-10 w-64 bg-indigo-200 rounded-2xl rounded-tr-sm" />
+                  <div className="max-w-2xl bg-indigo-200 text-transparent rounded-2xl rounded-tr-sm px-5 py-3.5">
+                    <p className="text-sm leading-relaxed text-indigo-700/50">
+                      {lastPromptRef.current || 'Sending...'}
+                    </p>
+                  </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="h-52 bg-white rounded-2xl border border-[#edeeef]" />
